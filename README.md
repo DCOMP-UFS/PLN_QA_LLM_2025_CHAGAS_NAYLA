@@ -14,84 +14,15 @@ Para isso, utilizaremos um notebook em Python, criado no ambiente do Google Cola
 
 #### **Etapa 1: Configuração do ambiente de trabalho**
 
-O primeiro passo em qualquer projeto de processamento de linguagem natural é garantir que todas as ferramentas necessárias estejam instaladas. No ambiente do Google Colab, isso é feito de maneira simples, utilizando o comando:
-
-```python
-!pip install -U --quiet transformers pypdf python-docx pandas
-```
-
-  * **`transformers`**: Esta é a biblioteca principal do Hugging Face. Ela nos dá acesso a milhares de modelos pré-treinados para diversas tarefas, incluindo a de Perguntas e Respostas.
-  * **`pypdf`**: Utilizada para extrair o texto de documentos no formato PDF. No nosso caso, será usada para ler o arquivo `doencas_respiratorias_cronicas.pdf`.
-  * **`python-docx`**: Permite a extração de texto de documentos do Microsoft Word (`.docx`), como o nosso `DICIONARIO_DE_DADOS.docx`.
-  * **`pandas`**: Embora não seja central para a tarefa de QA em si, é uma ferramenta poderosa para manipulação e análise de dados, útil para organizar os resultados dos testes.
-
-Após a instalação, importamos os módulos necessários para o nosso script.
-
-```python
-import pypdf
-import docx
-import pandas as pd
-from transformers import pipeline
-```
+O primeiro passo em qualquer projeto de processamento de linguagem natural é garantir que todas as ferramentas necessárias estejam instaladas.
 
 #### **Etapa 2: Construção da base de conhecimento**
 
 Um modelo de QA precisa de um contexto para encontrar as respostas. Nesta etapa, preparamos nossos dois documentos para que sirvam como essa base de conhecimento, extraindo o texto bruto e armazenando-o em variáveis.
 
-**`doencas_respiratorias_cronicas.pdf`**
+#### **Etapa 3: Avaliação do desempenho**
 
-Utiliza-se a biblioteca `pypdf` para ler o arquivo PDF página por página e concatenar todo o texto em uma única variável chamada `conteudo_doencas_cronicas`.
-
-```python
-doencas_cronicas = pypdf.PdfReader("doencas_respiratorias_cronicas.pdf")
-conteudo_doencas_cronicas = "\\n".join([doencas_cronicas.pages[i].extract_text() for i in range(len(doencas_cronicas.pages))])
-```
-
-**`DICIONARIO_DE_DADOS.docx`**
-
-De forma similar à pypdf, a biblioteca `docx` é percorre o documento do Word, extraindo o conteúdo de parágrafos e tabelas. O texto de cada célula da tabela é unido por um separador (`|`) para manter a estrutura, e o resultado final é armazenado na variável `dict_dados`.
-
-```python
-doc = docx.Document("DICIONARIO_DE_DADOS.docx")
-textos_completos = []
-for para in doc.paragraphs:
-    textos_completos.append(para.text)
-for table in doc.tables:
-    for row in table.rows:
-        textos_completos.append(" | ".join(cell.text for cell in row.cells))
-dict_dados = "\\n".join(textos_completos)
-```
-
------
-
-#### **Etapa 3: Modularização da função de teste**
-
-Para organizar o processo de avaliação, foi criada uma função reutilizável chamada `responder_pergunta`. Esta função é o coração do nosso experimento. Ela recebe dois argumentos: qa_input e model_name.
-
-```python
-def responder_pergunta(qa_input: dict, model_name: str) -> dict:
-    """
-    Carrega um modelo de Question Answering e retorna a resposta para uma pergunta.
-    """
-    qa_model = pipeline("question-answering", model=model_name, tokenizer=model_name)
-    resultado = qa_model(qa_input)
-
-    return resultado
-```
-
-Os argumentos da função possuem os seguintes papéis:
-      * `qa_input`: Um dicionário contendo a pergunta (`question`) e o texto de referência (`context`).
-      * `model_name`: O nome do modelo a ser baixado do Hugging Face.
-
-Dentro dela, inicializamos o `pipeline`, executamos o modelo com a pergunta desejada e o contexto e retornamos a resposta gerada.
-
->  O `pipeline` do Hugging Face é uma abstração de alto nível que simplifica o uso de modelos. Ao especificar `"question-answering"`, a biblioteca cuida de todo o pré-processamento do texto e da formatação da saída.
-
- A saída da função é um dicionário que contém a resposta encontrada (`answer`), um índice de confiança (`score`) e a localização da resposta no texto original (`start` e `end`).
-
-#### **Etapa 4: Avaliação do desempenho**
-
-Com o ambiente e as funções prontos, o processo de avaliação pode começar. O objetivo é submeter três modelos diferentes às mesmas perguntas e comparar suas respostas.
+Com o ambiente e as funções prontos, o processo de avaliação pode começar. Nosso objetivo é submeter três modelos diferentes às mesmas perguntas e comparar suas respostas.
 
 **1. Seleção dos modelos:**
 
