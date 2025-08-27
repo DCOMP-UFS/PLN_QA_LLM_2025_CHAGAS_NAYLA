@@ -2,9 +2,9 @@
 
 **Equipe:**
 
-    Camille: seleção de modelos; implementação; validação da documentação.
-    Nayla: seleção de modelos; seleção de perguntas; implementação; documentação. 
-    Túlio: seleção de modelos; implementação; testes; gravação do vídeo.
+    Camille Sousa Meneses de Santana: seleção de modelos; implementação; validação da documentação.
+    Nayla Sahra Santos das Chagas: seleção de modelos; seleção de perguntas; implementação; documentação. 
+    Túlio Sousa de Gois: seleção de modelos; implementação; testes; gravação do vídeo.
 
 Neste tutorial, vamos explorar um processo estruturado para testar e comparar o desempenho de modelos de código aberto, disponíveis gratuitamente na plataforma Hugging Face. Nosso principal objetivo é responder à pergunta: **"Como é o desempenho de modelos gratuitos do Hugging Face na tarefa de QA em português brasileiro?"**
 
