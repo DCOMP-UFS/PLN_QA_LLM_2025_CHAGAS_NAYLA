@@ -306,4 +306,13 @@ for pergunta in qa_dic_dados:
 | Que tabelas se relacionam com a `tb_carga_horaria_sus`? | DICIONARIO_DE_DADOS.docx | ``' VÍNCULOS DO PROFISSIONAL NO ESTABELECIMENTO'`` | Não há outras tabelas mencionadas que se relacionem diretamente com TB_CARGA_HORARIA_SUS no contexto fornecido. Não encontrei no contexto. Toquei nas três tabelas mencionadas, mas não identifiquei nenhuma outra relacionada especificamente à TB_CARGA_HORARIA_SUS. | TB_ESTABELECIMENTO, TB_ATIVIDADE_PROFISSIONAL, TB_MOD_VINCULO, TB_TP_MOD_VINCULO, TB_SUB_TP_MOD_VINCULO |
 | Recebi um arquivo de planilha via email, que alegava ser uma amostra da tabela `rl_estab_serv_class`. Ao investigar o arquivo, notei que a planilha apresentava a coluna `codservico` com alguns registros nulos. Posso considerar esse arquivo como uma amostra verídica? | DICIONARIO_DE_DADOS.docx | ``' VARCHAR(7)'`` | Para determinar se o arquivo pode ser considerado uma amostra verídica da tabela `rl_estab_serv_class`, seria necessário verificar se os campos presentes no arquivo estão corretamente preenchidos e se os valores nulos correspondem aos esperados para essa tabela. No contexto fornecido, não há informações específicas sobre a tabela `rl_estab_serv_class` ou quaisquer campos nela relacionados à coluna `codservico`. Portanto, não podemos fazer uma conclusão baseada apenas nas informações fornecidas. Seria necessário analisar diretamente a estrutura da tabela `rl_estab_serv_class` e verificar os valores nulos em `codservico` para determinar se eles são aceitáveis ou não. Além disso, seria importante verificar se os outros campos do arquivo estão consistentes com a estrutura da tabela `rl_estab_serv_class`.  | Não. O campo codservico não pode ser nulo. |
 
+#### Comparação de Desempenho dos Modelos Testados
+
+| Modelo | Total de Perguntas |  Acertos Sobre Doenças Respiratórias | Acertos Sobre Dicionário de Dados | Taxa de Sucesso |
+| --------------- | -------- | -------- | -------- | ----------------- |
+| deepset/xlm-roberta-large-squad2 | 6 | 2 | 1 | 50% |
+| pierreguillou/bert-base-cased-squad-v1.1-portuguese | 6 | 1 | 1 | 33% |
+| benjleite/ptt5-ptbr-qa | 6  | 0 | 0 | 0% |
+| Qwen/Qwen2.5-3B-Instruct | 6 | 3 | 0 | 50% |
+
 Observando os resultados acima, podemos perceber que o modelo com RAG entrega respostas mais completas em relação ao documento de doenças respiratórias crônicas. Mas ainda se mostra ineficiente ao buscar respostas no dicionário de dados.
